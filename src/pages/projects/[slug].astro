@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectArtwork from '../../components/ProjectArtwork.astro';
+import { site, projects, type Project } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<Layout title={`${project.name} — ${project.tagline} | ${site.name}`} description={project.description}>
+  <div class="container detail">
+    <a class="back-link" href="/#projects">← 返回项目</a>
+
+    <header class="detail-head">
+      <span class="eyebrow">PROJECT / {project.name.toUpperCase()}</span>
+      <h1>{project.tagline}</h1>
+      <p class="detail-sub">{project.description}</p>
+      <div class="detail-meta">
+        <ul class="tags">
+          {project.tags.map((t) => <li>{t}</li>)}
+        </ul>
+        {project.repositoryUrl ? (
+          <a class="link" href={project.repositoryUrl} rel="noopener noreferrer">源码 ↗</a>
+        ) : (
+          <span class="pending">源码链接待补充</span>
+        )}
+        {project.liveUrl && (
+          <a class="link" href={project.liveUrl} rel="noopener noreferrer">在线访问 ↗</a>
+        )}
+      </div>
+    </header>
+
+    <div class="detail-art">
+      <ProjectArtwork art={project.artwork} />
+    </div>
+
+    <div class="prose">
+      {project.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  </div>
+</Layout>

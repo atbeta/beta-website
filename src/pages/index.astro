@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Scene from '../components/Scene.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ProjectArtwork from '../components/ProjectArtwork.astro';
+import LabCard from '../components/LabCard.astro';
+import { site, projects, experiments, notes } from '../data/site';
+---
+
+<Layout>
+  {/* ---------- hero ---------- */}
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">INDEPENDENT DEVELOPER · CREATIVE CODER</p>
+        <h1 class="hero-title">{site.heroLines[0]}<br /><span class="dim">{site.heroLines[1]}</span></h1>
+        <p class="hero-sub">
+          {site.introduction}<br />{site.description}
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">探索我的项目 ↗</a>
+          <a class="btn btn-ghost" href="#lab">走进实验室 →</a>
+        </div>
+        <div class="hero-meta" aria-hidden="true">
+          <span>BASED ON CURIOSITY</span>
+          <span class="sq"></span>
+          <span class="sq"></span>
+          <span class="sq"></span>
+        </div>
+      </div>
+      <Scene mode="knot" caption="FIG. 001 / CONTINUOUS FORM" />
+    </div>
+    <div class="container hero-end">
+      <hr />
+      <span class="scroll-hint">SCROLL ↓</span>
+    </div>
+  </section>
+
+  {/* ---------- 01 精选项目 ---------- */}
+  <section class="section" id="projects">
+    <div class="container">
+      <SectionHead index="01" zh="精选项目" en="SELECTED WORK" note="一些认真做过的小东西。" />
+      <div class="project-grid">
+        {
+          projects.map((p, i) => (
+            <a class="project-card" href={`/projects/${p.slug}/`}>
+              <div class="project-art">
+                <ProjectArtwork art={p.artwork} />
+              </div>
+              <div class="project-body">
+                <div class="project-top">
+                  <span class="project-index">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="project-arrow" aria-hidden="true">↗</span>
+                </div>
+                <h3>
+                  {p.name}
+                  <span class="project-tagline">{p.tagline}</span>
+                </h3>
+                <p>{p.description}</p>
+                <ul class="tags">
+                  {p.tags.map((t) => <li>{t}</li>)}
+                </ul>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 02 数字实验室 ---------- */}
+  <section class="section" id="lab">
+    <div class="container">
+      <SectionHead index="02" zh="数字实验室" en="PLAYGROUND" note="代码与视觉的边界，在这里试探。" />
+      <div class="lab-grid">
+        {experiments.map((e) => <LabCard experiment={e} />)}
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 03 最近笔记 ---------- */}
+  <section class="section" id="notes">
+    <div class="container">
+      <SectionHead index="03" zh="最近笔记" en="FIELD NOTES" note="写给自己看，也欢迎你看。" />
+      <div class="note-list">
+        {
+          notes.map((n) => (
+            <a class="note-row" href={`/notes/${n.slug}/`}>
+              <span class="note-date">{n.date}</span>
+              <span class="note-title">{n.title}</span>
+              <span class="note-cat">{n.category}</span>
+              <span class="note-arrow" aria-hidden="true">→</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- about ---------- */}
+  <section class="section about" id="about">
+    <div class="container about-grid">
+      <h2>{site.aboutTitle}</h2>
+      <div class="about-copy">
+        <p>{site.introduction}{site.aboutText}</p>
+        <p class="tech">BUILT WITH ASTRO · TYPESCRIPT · THREE.JS</p>
+      </div>
+    </div>
+  </section>
+</Layout>

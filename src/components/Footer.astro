@@ -1,0 +1,65 @@
+---
+import { site } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-contact" id="contact">
+      <p class="eyebrow">CONTACT</p>
+      <h2>有想法？聊聊吧。</h2>
+      <div class="email-row">
+        <code id="contact-email">{site.email}</code>
+        <button class="copy-btn" type="button" data-copy-email>复制邮箱</button>
+        <span class="copy-feedback" aria-live="polite" data-copy-feedback></span>
+      </div>
+      {site.sample && <p class="footer-note">示例邮箱</p>}
+      {
+        site.githubUrl && (
+          <div class="footer-links">
+            <a href={site.githubUrl} rel="noopener noreferrer">GitHub ↗</a>
+          </div>
+        )
+      }
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 {site.name}</span>
+      {site.sample && <span class="sample">演示站点 · 项目与文章为示例内容</span>}
+      <a class="top-link" href="#top">回到顶部 ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy-email]');
+  const feedback = document.querySelector<HTMLElement>('[data-copy-feedback]');
+  const email = document.getElementById('contact-email')?.textContent?.trim() ?? '';
+  let timer: number | undefined;
+
+  btn?.addEventListener('click', async () => {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(email);
+      ok = true;
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = email;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        ok = document.execCommand('copy');
+      } catch {
+        ok = false;
+      }
+      ta.remove();
+    }
+    if (feedback) {
+      window.clearTimeout(timer);
+      feedback.textContent = ok ? '已复制邮箱' : '复制失败，请手动选择';
+      timer = window.setTimeout(() => {
+        feedback.textContent = '';
+      }, 2600);
+    }
+  });
+</script>

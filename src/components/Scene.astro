@@ -1,0 +1,119 @@
+---
+interface Props {
+  mode?: 'knot' | 'particles' | 'wave';
+  compact?: boolean;
+  caption?: string;
+}
+
+const { mode = 'knot', compact = false, caption } = Astro.props;
+const tag = caption ?? `FIG. 00${mode === 'knot' ? '1' : mode === 'particles' ? '2' : '3'} / ${mode.toUpperCase()}`;
+const hint = mode === 'knot' ? '拖动探索' : '移动指针';
+---
+
+<figure
+  class:list={['scene', compact && 'scene--compact']}
+  data-scene
+  data-mode={mode}
+>
+  <div class="scene-frame" aria-hidden="true">
+    <span class="corner c-tl"></span>
+    <span class="corner c-tr"></span>
+    <span class="corner c-bl"></span>
+    <span class="corner c-br"></span>
+    <span class="scene-tag">{tag}</span>
+  </div>
+
+  <div class="scene-canvas" data-scene-canvas>
+    {
+      mode === 'knot' && (
+        <svg class="scene-fallback" viewBox="0 0 400 400" fill="none" role="img" aria-label="线框几何体示意图">
+          <g stroke="var(--scene-line)" stroke-opacity=".55" stroke-width="1">
+            <ellipse cx="200" cy="200" rx="140" ry="54" transform="rotate(-20 200 200)" />
+            <ellipse cx="200" cy="200" rx="140" ry="54" transform="rotate(34 200 200)" />
+            <ellipse cx="200" cy="200" rx="104" ry="42" transform="rotate(88 200 200)" />
+          </g>
+          <g stroke="var(--text)" stroke-opacity=".28" stroke-width="1">
+            <circle cx="200" cy="200" r="62" />
+            <circle cx="200" cy="200" r="148" stroke-dasharray="2 7" />
+          </g>
+          <circle cx="200" cy="200" r="3" fill="var(--scene-line)" />
+        </svg>
+      )
+    }
+    {
+      mode === 'particles' && (
+        <svg class="scene-fallback" viewBox="0 0 400 400" fill="none" role="img" aria-label="粒子场示意图">
+          <g fill="var(--scene-line)">
+            <circle cx="90" cy="120" r="2.4" /><circle cx="150" cy="80" r="1.8" fill-opacity=".6" />
+            <circle cx="230" cy="110" r="2.2" /><circle cx="310" cy="90" r="1.6" fill-opacity=".5" />
+            <circle cx="70" cy="220" r="1.8" fill-opacity=".55" /><circle cx="140" cy="260" r="2.6" />
+            <circle cx="205" cy="200" r="2" fill-opacity=".7" /><circle cx="255" cy="255" r="1.7" fill-opacity=".5" />
+            <circle cx="330" cy="210" r="2.4" /><circle cx="110" cy="330" r="2" fill-opacity=".6" />
+            <circle cx="240" cy="330" r="2.5" /><circle cx="320" cy="300" r="1.7" fill-opacity=".55" />
+          </g>
+          <circle cx="200" cy="200" r="46" stroke="var(--text)" stroke-opacity=".3" stroke-dasharray="3 6" />
+          <circle cx="200" cy="200" r="3" fill="var(--text)" fill-opacity=".8" />
+        </svg>
+      )
+    }
+    {
+      mode === 'wave' && (
+        <svg class="scene-fallback" viewBox="0 0 400 400" fill="none" role="img" aria-label="波形网格示意图">
+          <g stroke="var(--scene-line)" stroke-opacity=".5" stroke-width="1">
+            <path d="M40 140 Q120 110 200 140 T360 140" />
+            <path d="M40 180 Q120 150 200 180 T360 180" />
+            <path d="M40 220 Q120 190 200 220 T360 220" />
+            <path d="M40 260 Q120 230 200 260 T360 260" />
+          </g>
+          <g stroke="var(--text)" stroke-opacity=".25" stroke-width="1">
+            <path d="M100 90 Q110 200 100 320" />
+            <path d="M200 90 Q210 200 200 320" />
+            <path d="M300 90 Q310 200 300 320" />
+          </g>
+        </svg>
+      )
+    }
+  </div>
+
+  <div class="scene-toolbar">
+    <button
+      type="button"
+      class="scene-btn"
+      data-scene-pause
+      aria-pressed="false"
+      aria-label="暂停动画"
+      disabled
+    >暂停</button>
+
+    {
+      mode === 'knot' && (
+        <div class="scene-seg" role="group" aria-label="几何形态">
+          <button type="button" data-scene-geo="knot" aria-pressed="true" disabled>KNOT</button>
+          <button type="button" data-scene-geo="orbit" aria-pressed="false" disabled>ORBIT</button>
+        </div>
+      )
+    }
+    {
+      mode === 'particles' && (
+        <label class="scene-range">
+          引力
+          <input type="range" data-scene-range min="0" max="100" value="45" aria-label="引力强度" disabled />
+        </label>
+      )
+    }
+    {
+      mode === 'wave' && (
+        <label class="scene-range">
+          振幅
+          <input type="range" data-scene-range min="0" max="100" value="55" aria-label="振幅" disabled />
+        </label>
+      )
+    }
+
+    <span class="scene-hint" aria-hidden="true">{hint}</span>
+  </div>
+</figure>
+
+<script>
+  import '../scripts/scenes';
+</script>

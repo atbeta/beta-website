@@ -1,0 +1,113 @@
+---
+interface Props {
+  art: 'prism' | 'orbit' | 'relay';
+}
+const { art } = Astro.props;
+---
+
+{
+  art === 'prism' && (
+    <svg viewBox="0 0 480 300" fill="none" role="img" aria-label="Prism 图片工具界面示意">
+      {/* app window */}
+      <rect x="20" y="18" width="440" height="264" rx="10" fill="var(--panel)" stroke="var(--art-border)" />
+      <rect x="20" y="18" width="440" height="34" rx="10" fill="var(--panel-2)" />
+      <rect x="20" y="40" width="440" height="12" fill="var(--panel-2)" />
+      <circle cx="42" cy="35" r="4" fill="#e0a08a" />
+      <circle cx="58" cy="35" r="4" fill="#e6cf8f" />
+      <circle cx="74" cy="35" r="4" fill="var(--accent)" />
+      <rect x="340" y="28" width="104" height="14" rx="7" fill="var(--bg)" stroke="var(--art-border)" />
+      {/* image tiles */}
+      <rect x="38" y="70" width="118" height="88" rx="6" fill="#e0a08a" fill-opacity=".85" />
+      <path d="M38 140 L76 104 L104 128 L128 110 L156 134 L156 152 Q156 158 150 158 L44 158 Q38 158 38 152 Z" fill="var(--bg)" fill-opacity=".35" />
+      <circle cx="66" cy="92" r="9" fill="var(--bg)" fill-opacity=".3" />
+      <rect x="164" y="70" width="118" height="88" rx="6" fill="#9ec4d8" fill-opacity=".85" />
+      <path d="M164 138 L200 108 L226 130 L252 114 L282 140 L282 152 Q282 158 276 158 L170 158 Q164 158 164 152 Z" fill="var(--bg)" fill-opacity=".35" />
+      <circle cx="256" cy="92" r="9" fill="var(--bg)" fill-opacity=".3" />
+      <rect x="38" y="166" width="244" height="72" rx="6" fill="var(--accent)" fill-opacity=".8" />
+      <path d="M38 216 L96 184 L140 206 L190 188 L238 210 L282 192 L282 232 Q282 238 276 238 L44 238 Q38 238 38 232 Z" fill="var(--bg)" fill-opacity=".28" />
+      {/* sidebar */}
+      <rect x="298" y="70" width="144" height="168" rx="8" fill="var(--art-bg)" stroke="var(--art-border)" />
+      <rect x="312" y="84" width="60" height="8" rx="4" fill="var(--art-control)" />
+      <rect x="312" y="104" width="116" height="4" rx="2" fill="var(--art-border)" />
+      <circle cx="366" cy="106" r="6" fill="var(--accent)" />
+      <rect x="312" y="126" width="116" height="4" rx="2" fill="var(--art-border)" />
+      <circle cx="342" cy="128" r="6" fill="var(--text)" fill-opacity=".8" />
+      <rect x="312" y="148" width="116" height="4" rx="2" fill="var(--art-border)" />
+      <circle cx="398" cy="150" r="6" fill="var(--text)" fill-opacity=".45" />
+      <rect x="312" y="172" width="30" height="30" rx="5" fill="#e0a08a" fill-opacity=".8" />
+      <rect x="348" y="172" width="30" height="30" rx="5" fill="#9ec4d8" fill-opacity=".8" />
+      <rect x="384" y="172" width="30" height="30" rx="5" fill="var(--accent)" fill-opacity=".8" />
+      <rect x="312" y="212" width="116" height="12" rx="6" fill="var(--accent)" fill-opacity=".2" />
+      <rect x="312" y="212" width="66" height="12" rx="6" fill="var(--accent)" fill-opacity=".55" />
+    </svg>
+  )
+}
+
+{
+  art === 'orbit' && (
+    <svg viewBox="0 0 480 300" fill="none" role="img" aria-label="Orbit 知识图谱示意">
+      <rect x="0" y="0" width="480" height="300" fill="var(--bg)" />
+      {/* edges */}
+      <g stroke="var(--text)" stroke-opacity=".18" stroke-width="1">
+        <line x1="240" y1="150" x2="140" y2="86" />
+        <line x1="240" y1="150" x2="150" y2="214" />
+        <line x1="240" y1="150" x2="342" y2="96" />
+        <line x1="240" y1="150" x2="352" y2="206" />
+        <line x1="240" y1="150" x2="238" y2="52" />
+        <line x1="140" y1="86" x2="238" y2="52" />
+        <line x1="342" y1="96" x2="352" y2="206" />
+        <line x1="150" y1="214" x2="240" y2="252" />
+        <line x1="352" y1="206" x2="240" y2="252" />
+        <line x1="140" y1="86" x2="70" y2="140" />
+        <line x1="70" y1="140" x2="150" y2="214" />
+      </g>
+      {/* orbit ring */}
+      <circle cx="240" cy="150" r="96" stroke="var(--accent)" stroke-opacity=".16" stroke-dasharray="3 7" />
+      {/* nodes */}
+      <g stroke-width="1.5">
+        <circle cx="240" cy="150" r="14" fill="var(--accent)" fill-opacity=".9" stroke="var(--accent)" />
+        <circle cx="140" cy="86" r="9" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".7" />
+        <circle cx="150" cy="214" r="9" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".7" />
+        <circle cx="342" cy="96" r="9" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".7" />
+        <circle cx="352" cy="206" r="9" fill="var(--panel)" stroke="var(--accent)" />
+        <circle cx="238" cy="52" r="7" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".5" />
+        <circle cx="240" cy="252" r="7" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".5" />
+        <circle cx="70" cy="140" r="6" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".4" />
+        <circle cx="420" cy="150" r="5" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".35" />
+        <circle cx="60" cy="60" r="4" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".3" />
+        <circle cx="418" cy="52" r="4" fill="var(--panel)" stroke="var(--text)" stroke-opacity=".3" />
+      </g>
+      <line x1="352" y1="206" x2="420" y2="150" stroke="var(--text)" stroke-opacity=".12" />
+      <line x1="60" y1="60" x2="140" y2="86" stroke="var(--text)" stroke-opacity=".1" />
+      <line x1="418" y1="52" x2="342" y2="96" stroke="var(--text)" stroke-opacity=".1" />
+      {/* labels */}
+      <g font-family="ui-monospace, monospace" font-size="9" fill="var(--muted)" letter-spacing="1.5">
+        <text x="262" y="146">IDEA-07</text>
+        <text x="356" y="200" fill="var(--accent)">NOTE-12</text>
+      </g>
+    </svg>
+  )
+}
+
+{
+  art === 'relay' && (
+    <svg viewBox="0 0 480 300" fill="none" role="img" aria-label="Relay 终端示意">
+      <rect x="20" y="30" width="440" height="240" rx="10" fill="var(--bg)" stroke="var(--art-border)" />
+      <rect x="20" y="30" width="440" height="32" rx="10" fill="var(--panel)" />
+      <rect x="20" y="50" width="440" height="12" fill="var(--panel)" />
+      <circle cx="42" cy="46" r="4" fill="#e0a08a" />
+      <circle cx="58" cy="46" r="4" fill="#e6cf8f" />
+      <circle cx="74" cy="46" r="4" fill="var(--accent)" />
+      <text x="200" y="50" font-family="ui-monospace, monospace" font-size="10" fill="var(--muted)" letter-spacing="2">relay — zsh</text>
+      <g font-family="ui-monospace, monospace" font-size="13">
+        <text x="44" y="96"><tspan fill="var(--accent)">$ </tspan><tspan fill="var(--text)">relay env work</tspan></text>
+        <text x="44" y="122"><tspan fill="var(--muted)">→ switched 3 configs</tspan><tspan fill="var(--muted)" fill-opacity=".55"> · 42ms</tspan></text>
+        <text x="44" y="152"><tspan fill="var(--accent)">$ </tspan><tspan fill="var(--text)">relay up</tspan></text>
+        <text x="44" y="178"><tspan fill="var(--muted)">→ api</tspan><tspan fill="var(--accent)"> ✓</tspan><tspan fill="var(--muted)">   web</tspan><tspan fill="var(--accent)"> ✓</tspan><tspan fill="var(--muted)">   docs</tspan><tspan fill="var(--accent)"> ✓</tspan></text>
+        <text x="44" y="204"><tspan fill="var(--accent)">$ </tspan><tspan fill="var(--text)">relay sweep</tspan></text>
+        <text x="44" y="230"><tspan fill="var(--muted)">→ freed 1.8 GB</tspan><tspan fill="var(--muted)" fill-opacity=".55"> · node_modules ×6</tspan></text>
+      </g>
+      <rect x="44" y="244" width="6" height="14" fill="var(--accent)" />
+    </svg>
+  )
+}

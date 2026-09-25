@@ -1,0 +1,28 @@
+---
+import { site } from '../data/site';
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="返回首页">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="0" y="0" width="8.5" height="8.5" fill="var(--accent)" />
+        <rect x="11.5" y="0" width="8.5" height="8.5" fill="var(--accent)" fill-opacity=".55" />
+        <rect x="0" y="11.5" width="8.5" height="8.5" fill="var(--accent)" fill-opacity=".55" />
+        <rect x="12.25" y="12.25" width="7" height="7" fill="none" stroke="var(--accent)" stroke-width="1.5" />
+      </svg>
+      <span class="wordmark">{site.wordmark}</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="/#projects">项目</a>
+      <a href="/#lab">实验室</a>
+      <a href="/#notes">笔记</a>
+      <a href="/#about">关于</a>
+    </nav>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换主题" title="切换主题">
+      <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg>
+      <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.5 13.4A8.5 8.5 0 0 1 10.6 3.5a8.5 8.5 0 1 0 9.9 9.9Z"/></svg>
+    </button>
+    <a class="header-contact" href="/#contact">联系我 ↗</a>
+  </div>
+</header>

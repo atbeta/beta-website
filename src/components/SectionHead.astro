@@ -1,0 +1,18 @@
+---
+interface Props {
+  index: string;
+  zh: string;
+  en: string;
+  note?: string;
+}
+const { index, zh, en, note } = Astro.props;
+---
+
+<div class="section-head">
+  <div>
+    <span class="idx">{index} /</span>
+    <h2 class="zh">{zh}</h2>
+    <span class="en">{en}</span>
+  </div>
+  {note && <p class="note">{note}</p>}
+</div>
