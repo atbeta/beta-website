@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { site } from '../../data/site';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const research = await getCollection('research');
+  return research.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'research'>;
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const date = entry.data.date.toISOString().slice(0, 10);
+---
+
+<Layout title={`${entry.data.title} | ${site.name}`} description={entry.data.description}>
+  <div class="container detail">
+    <a class="back-link" href="/#notes">← 返回笔记与研究</a>
+
+    <header class="detail-head" data-reveal>
+      <span class="eyebrow">RESEARCH / {date}</span>
+      <h1>{entry.data.title}</h1>
+      <p class="detail-sub">{entry.data.description}</p>
+      <div class="detail-meta">
+        <ul class="tags">
+          {entry.data.tags.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </header>
+
+    <div class="prose" data-reveal>
+      <Content />
+    </div>
+  </div>
+</Layout>

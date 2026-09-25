@@ -1,0 +1,40 @@
+---
+title: "NoteFast — AI 原生的自托管知识库"
+description: "写下的每条笔记自动被索引、关联、检索：FTS5 + 向量混合检索、自动建链、带引用的 RAG 对话。单文件 SQLite，macOS/Windows 原生客户端，MCP 完整开放给 AI Agent。"
+date: "2026-08-24"
+tags: ["Bun", "TypeScript", "React", "SQLite", "RAG", "MCP", "Knowledge Base"]
+projectStatus: active
+url: "https://notefast.pbeta.dev"
+repo: "https://github.com/atbeta/notefast"
+artwork: "prism"
+cover: "/projects/notefast/app.png"
+---
+
+NoteFast 是 AI 原生的自托管 Markdown 知识库：每条笔记自动建立全文（FTS5）与语义（向量）双重索引，自动链接相关笔记，并提供带引用的 RAG 对话与实体知识图谱。全部数据只有一个 SQLite 文件；对 AI Agent，整个知识域（读写、搜索、对话、分享）通过 REST API 和 MCP 服务器完整开放。设计哲学是「AI 负责写入与理解，人类负责阅读」。
+
+![NoteFast 主界面：文档、智能视图与 AI 助手](/projects/notefast/app.png)
+
+## 核心功能
+
+- **混合检索** — FTS5 + 向量语义 + 标题/实体/图谱多路召回，RRF 融合 + 可选 reranker
+- **RAG 对话** — 带引用的问答 + agent loop，AI 可搜索、阅读、建议修改
+- **AutoLink 与知识图谱** — 写入后自动建立笔记间引用，实体抽取驱动力方面导向图谱
+- **AI 写作** — ghost-text 续写（⌘Enter）、选区改写、标题建议
+- **Block 树编辑器** — CodeMirror 混合编辑，Typora 式即时预览（图片/表格/LaTeX/Mermaid）
+- **BYOK 模型配置** — OpenAI 兼容的 chat/embedding/reranker 三槽位，预置 DeepSeek、Ollama 等
+- **多端同步** — 自建对象存储（S3/WebDAV）对等同步，无中心服务器
+- **灾备与导出** — SQLite→S3 快照 + 离线恢复 CLI，Markdown 便携归档
+- **MCP 服务器** — 20+ 工具，读/写 token 权限分离
+
+## 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| 后端 | Bun + Hono + SQLite（sqlite-vec 向量扩展），单文件权威存储 |
+| 前端 | React + CodeMirror 6 + KaTeX + Mermaid，中英双语 |
+| 桌面端 | macOS SwiftUI 壳（签名公证 DMG）、Windows Tauri |
+| 架构 | monorepo：core → server → web → clients，API/MCP first |
+
+## 状态
+
+不到 3 个月迭代 130+ 个版本（当前 v0.88.0），800+ 测试。Docker Hub 镜像拉取逾 2 万次（截至 2026-09），MIT 开源。

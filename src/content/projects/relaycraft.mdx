@@ -1,0 +1,43 @@
+---
+title: "RelayCraft — AI 原生的网络调试工具"
+description: "Charles/Proxyman 的开源、AI 原生替代。Tauri + React + Rust 构建的跨平台抓包调试工具，内置 MCP 服务器，让 AI Agent 直接读写实时流量。已发布 v1.5.1。"
+date: "2026-09-09"
+tags: ["Tauri", "Rust", "React", "mitmproxy", "MCP", "Network Debugging"]
+projectStatus: active
+url: "https://relaycraft.dev"
+repo: "https://github.com/relaycraft/relaycraft"
+artwork: "orbit"
+cover: "/projects/relaycraft/main.png"
+---
+
+RelayCraft 是面向现代开发流程的 AI 原生网络调试工具：实时捕获 HTTP/HTTPS/WebSocket 流量，可视化规则引擎、断点调试、请求构造、Python 脚本一应俱全。核心差异是 AI 深度贯穿工作流——自然语言建规则、AI 请求诊断，内置 MCP 服务器让 Claude / Cursor 等外部 Agent 直接查询流量、创建规则、重放请求。隐私优先：离线运行、零账号、本地存储、无遥测。
+
+![RelayCraft 主界面：流量列表与详情](/projects/relaycraft/main.png)
+
+## 核心功能
+
+- **流量捕获** — HTTP/HTTPS/WebSocket 实时抓包，智能筛选，导出 cURL / HAR / .relay 会话
+- **可视化规则引擎** — 本地映射、远程映射、重写 Header/Body、弱网模拟、请求拦截
+- **断点调试** — 实时拦截、篡改、放行 Request / Response
+- **请求构造器** — 内置 API 客户端，历史一键重放、cURL 导入
+- **Python 脚本** — 标准 mitmproxy 钩子 + CodeMirror 6 编辑器
+- **AI 助手** — ⌘K 命令中心，自然语言建规则 / 搜流量 / 生成脚本、请求诊断
+- **MCP 服务器** — 兼容 Claude Desktop / Cursor / Windsurf，外部 AI 直接操作实时流量
+- **插件与主题** — 官方插件市场（api-manager、privacy-guard 等）+ 5 套主题
+
+![可视化规则引擎](/projects/relaycraft/rules.png)
+
+![AI 助手：自然语言驱动调试](/projects/relaycraft/ai.png)
+
+## 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| UI 层 | React 19, TypeScript, Vite, Tailwind CSS v4, Zustand, CodeMirror 6 |
+| 系统层 | Tauri 2 + Rust，承载 MCP Server 与插件桥 |
+| 引擎层 | Python + mitmproxy（2.0 计划切换为 RelayCore） |
+| AI 接入 | 内置 MCP Server（HTTP Transport） |
+
+## 状态
+
+1.x 正式版持续发布（当前 v1.5.1），GitHub Releases 提供 macOS / Windows / Linux 全平台安装包，GPL-3.0 开源（另有商业许可）。配套生态：[文档站](https://docs.relaycraft.dev)、插件仓库、主题包。

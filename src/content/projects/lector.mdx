@@ -1,0 +1,36 @@
+---
+title: "Lector — 阅读优先的 Markdown 编辑器"
+description: "AI 时代读远大于写：磁盘上的 .md 文件是唯一权威，打开即读、原地编辑、字节级保真写回。不做库、不做同步、不做账号的桌面编辑器。"
+date: "2026-08-17"
+tags: ["Tauri", "Bun", "TypeScript", "CodeMirror", "Markdown", "Desktop"]
+projectStatus: active
+url: "https://lector-flax.vercel.app"
+repo: "https://github.com/atbeta/lector"
+artwork: "orbit"
+cover: "/projects/lector/dark.png"
+---
+
+Lector 是面向 Windows 和 macOS 的纯 Markdown 桌面编辑器，核心理念是「阅读体验是一等公民」：排版、大纲、秒开优先，编辑做到顺手能改。刻意不做文档管理——无库、无文件夹树、无标签、无账号、无同步；不存储、不索引、不在别处影子拷贝你的文档。打开应用双击 md 文件，目标 300ms 内见到正文。
+
+![Lector 暗色阅读界面：大纲、排版正文与状态栏](/projects/lector/dark.png)
+
+## 核心功能
+
+- **字节级保真** — 源码位置 IR 按块切片，未改动的块写回时字节一致
+- **三视图模式** — 阅读 / 源码 / 分栏，点击即编辑，`Ctrl+1/2/3` 切换
+- **大纲与位置记忆** — 重开文件回到上次阅读位置
+- **Mermaid + KaTeX** — 行内图表与数学公式，主题感知配色、点击放大
+- **聚焦块编辑** — 只有编辑中的块挂 CodeMirror 6，其余保持渲染预览
+- **可靠写盘** — 原子写入 + 磁盘外部变更冲突检测
+- **图片流** — 粘贴/拖放落本地相对路径，可选自定义命令直传图床（失败兜底本地副本）
+- **个性化** — 明暗主题、多配色、逐文档字体字号行高栏宽、中英双语
+
+![Lector 亮色主题](/projects/lector/light.png)
+
+## 技术栈
+
+Bun workspaces 四个包：`core`（无 DOM、测试先行的解析/切片/序列化）→ `editor`（IR 视图 + 聚焦块 CM6）→ `shell-web`（菜单/窗口/最近文件）→ `clients/tauri`（薄壳，IO 全走 IPC）。macOS 出签名公证 DMG，Windows 出 NSIS 安装器 + 便携包。
+
+## 状态
+
+pre-1.0 高活跃开发中（当前 v0.36.0），全自动化发版流水线：一条命令完成 bump、质量门、tag 与 CI 签名安装包。MIT 开源。

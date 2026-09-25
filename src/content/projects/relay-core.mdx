@@ -1,0 +1,48 @@
+---
+title: "RelayCore — 高性能 Rust 流量拦截引擎"
+description: "可嵌入的 Rust 流量拦截引擎：一套 runtime，CLI / TUI / REST / MCP / Tauri 多种接入。实测吞吐约为 mitmproxy 的 15 倍，已发布 crates.io 与 npm。RelayCraft 的下一代引擎。"
+date: "2026-09-05"
+tags: ["Rust", "MITM Proxy", "WebSocket", "MCP", "CLI", "crates.io"]
+projectStatus: active
+url: "https://relaycore.dev"
+repo: "https://github.com/relaycraft/relay-core"
+artwork: "relay"
+cover: "/projects/relay-core/webui.png"
+---
+
+RelayCore 是本地捕获、检查、修改 HTTP/HTTPS/WebSocket 流量的高性能 Rust 引擎，面向需要程序化控制（规则、脚本、断点）的开发者，以及需要原生 MCP 观察实时流量的 AI Agent。它既是 RelayCraft 桌面版的下一代引擎，也是独立发布的代理平台。
+
+![RelayCore 终端 TUI 演示](/projects/relay-core/tui-demo.gif)
+
+## 核心功能
+
+- **HTTP/HTTPS MITM** — 动态 TLS 证书生成、CA 一键信任
+- **WebSocket 拦截** — 消息级检查、修改与重放
+- **规则引擎** — 匹配 + 动作流水线（Mock、重定向、延迟、限速）
+- **拦截断点** — 暂停实时流量、修改后放行或丢弃
+- **CLI + TUI** — 常驻守护进程模式，其他界面都是守护进程的客户端
+- **REST + SSE API** — 语言无关集成，附赠 Web UI
+- **MCP 适配器** — `npx -y @relay-core/mcp` 一行接入 Cursor / Claude
+- **Deno/V8 脚本** — 可选脚本拦截器，动态改写请求/响应
+- **透明代理** — Linux TPROXY、macOS PF、Windows
+- **可观测** — Prometheus 指标、审计日志、可选 SQLite 持久化
+
+## 性能
+
+与 mitmproxy 的同机基准对比（v0.14.0 实测）：吞吐 **38,884 req/s vs 2,517 req/s（约 15.5 倍）**，P99 延迟 **3.42ms vs 150.44ms**。每个版本发布都强制跑性能基线并入库。
+
+## 架构
+
+分层 crate workspace：**Adapter → API → Runtime → Engine**，所有适配器共享同一个 actor 式状态协调核心：
+
+```
+relay-core-cli / -http / -probe / -tauri   （适配器：CLI·TUI / REST+SSE / MCP / Tauri）
+        │
+relay-core-runtime                         （主 API，状态编排与生命周期）
+        │
+relay-core-lib                             （抓包、代理、MITM、规则引擎）
+```
+
+## 状态
+
+0.x 快速迭代中（当前 v0.14.0），MIT 开源。已发布 crates.io（`relay-core-runtime` 等 4 个 crate）与 npm（`@relay-core/cli`、`@relay-core/mcp`）。
