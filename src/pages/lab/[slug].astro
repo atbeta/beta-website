@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Scene from '../../components/Scene.astro';
+import { LabDemo } from '../../components/lab';
 import { site, experiments, type Experiment } from '../../data/site';
 
 export function getStaticPaths() {
@@ -11,14 +12,15 @@ interface Props {
   experiment: Experiment;
 }
 const { experiment } = Astro.props;
+const kind = experiment.demo ?? experiment.mode ?? '';
 ---
 
 <Layout title={`${experiment.title} — 数字实验室 | ${site.name}`} description={experiment.description}>
   <div class="container detail">
     <a class="back-link" href="/#lab">← 返回实验室</a>
 
-    <header class="detail-head">
-      <span class="eyebrow">EXPERIMENT / {experiment.mode.toUpperCase()}</span>
+    <header class="detail-head" data-reveal>
+      <span class="eyebrow">EXPERIMENT / {kind.toUpperCase()}</span>
       <h1>{experiment.title}</h1>
       <p class="detail-sub">{experiment.description}</p>
       <div class="detail-meta">
@@ -28,17 +30,20 @@ const { experiment } = Astro.props;
       </div>
     </header>
 
-    <div class="lab-stage">
-      <Scene
-        mode={experiment.mode}
-        caption={`LAB / ${experiment.slug.toUpperCase()}`}
-      />
+    <div class="lab-stage" data-reveal>
+      {experiment.demo ? (
+        <LabDemo demo={experiment.demo} client:only="react" />
+      ) : (
+        <Scene
+          mode={experiment.mode!}
+          caption={`LAB / ${experiment.slug.toUpperCase()}`}
+        />
+      )}
     </div>
 
-    <div class="prose">
+    <div class="prose" data-reveal>
       <p>
-        这是一个可交互的小实验：画布支持拖动旋转，下方工具栏可以暂停动画或调整参数。
-        如果看不到画面，可能是浏览器不支持 WebGL，占位示意图会继续显示。
+        这是一个可交互的小实验：在画布上直接拖拽，或用下方的控件调节参数，观察结果的实时变化。
       </p>
     </div>
   </div>

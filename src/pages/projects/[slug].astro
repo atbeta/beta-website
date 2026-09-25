@@ -1,47 +1,56 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ProjectArtwork from '../../components/ProjectArtwork.astro';
-import { site, projects, type Project } from '../../data/site';
+import { site } from '../../data/site';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
-export function getStaticPaths() {
-  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
 }
 
 interface Props {
-  project: Project;
+  project: CollectionEntry<'projects'>;
 }
 const { project } = Astro.props;
+const { Content } = await render(project);
+
+const [name, tagline] = project.data.title.split(/\s+—\s+/);
 ---
 
-<Layout title={`${project.name} — ${project.tagline} | ${site.name}`} description={project.description}>
+<Layout title={`${name} — ${tagline ?? ''} | ${site.name}`} description={project.data.description}>
   <div class="container detail">
     <a class="back-link" href="/#projects">← 返回项目</a>
 
-    <header class="detail-head">
-      <span class="eyebrow">PROJECT / {project.name.toUpperCase()}</span>
-      <h1>{project.tagline}</h1>
-      <p class="detail-sub">{project.description}</p>
+    <header class="detail-head" data-reveal>
+      <span class="eyebrow">PROJECT / {name.toUpperCase()}</span>
+      <h1>{tagline ?? project.data.title}</h1>
+      <p class="detail-sub">{project.data.description}</p>
       <div class="detail-meta">
         <ul class="tags">
-          {project.tags.map((t) => <li>{t}</li>)}
+          {project.data.tags.map((t) => <li>{t}</li>)}
         </ul>
-        {project.repositoryUrl ? (
-          <a class="link" href={project.repositoryUrl} rel="noopener noreferrer">源码 ↗</a>
+        {project.data.repo ? (
+          <a class="link" href={project.data.repo} rel="noopener noreferrer">源码 ↗</a>
         ) : (
           <span class="pending">源码链接待补充</span>
         )}
-        {project.liveUrl && (
-          <a class="link" href={project.liveUrl} rel="noopener noreferrer">在线访问 ↗</a>
+        {project.data.url && (
+          <a class="link" href={project.data.url} rel="noopener noreferrer">在线访问 ↗</a>
         )}
       </div>
     </header>
 
-    <div class="detail-art">
-      <ProjectArtwork art={project.artwork} />
+    <div class="detail-art" data-reveal>
+      {project.data.cover ? (
+        <img src={project.data.cover} alt={`${name} 界面截图`} />
+      ) : (
+        <ProjectArtwork art={project.data.artwork} />
+      )}
     </div>
 
     <div class="prose">
-      {project.paragraphs.map((p) => <p>{p}</p>)}
+      <Content />
     </div>
   </div>
 </Layout>

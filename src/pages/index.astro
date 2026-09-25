@@ -4,22 +4,46 @@ import Scene from '../components/Scene.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ProjectArtwork from '../components/ProjectArtwork.astro';
 import LabCard from '../components/LabCard.astro';
-import { site, projects, experiments, notes } from '../data/site';
+import { site, experiments } from '../data/site';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const writings = [
+  ...(await getCollection('notes')).map((n) => ({
+    slug: n.id,
+    href: `/notes/${n.id}/`,
+    title: n.data.title,
+    date: n.data.date,
+    category: '笔记',
+  })),
+  ...(await getCollection('research')).map((r) => ({
+    slug: r.id,
+    href: `/research/${r.id}/`,
+    title: r.data.title,
+    date: r.data.date,
+    category: '研究',
+  })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
 <Layout>
   {/* ---------- hero ---------- */}
   <section class="hero">
     <div class="container hero-grid">
-      <div class="hero-copy">
+      <div class="hero-copy" data-reveal>
         <p class="eyebrow">INDEPENDENT DEVELOPER · CREATIVE CODER</p>
         <h1 class="hero-title">{site.heroLines[0]}<br /><span class="dim">{site.heroLines[1]}</span></h1>
         <p class="hero-sub">
           {site.introduction}<br />{site.description}
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects">探索我的项目 ↗</a>
-          <a class="btn btn-ghost" href="#lab">走进实验室 →</a>
+          <a class="btn btn-primary" href="#projects">查看项目 ↗</a>
+          <a class="btn btn-ghost" href="#lab">进入实验室 →</a>
         </div>
         <div class="hero-meta" aria-hidden="true">
           <span>BASED ON CURIOSITY</span>
@@ -28,7 +52,7 @@ import { site, projects, experiments, notes } from '../data/site';
           <span class="sq"></span>
         </div>
       </div>
-      <Scene mode="knot" caption="FIG. 001 / CONTINUOUS FORM" />
+      <Scene mode="knot" caption="FIG. 001 / CONTINUOUS FORM" data-reveal style="--reveal-delay:140ms" />
     </div>
     <div class="container hero-end">
       <hr />
@@ -39,30 +63,42 @@ import { site, projects, experiments, notes } from '../data/site';
   {/* ---------- 01 精选项目 ---------- */}
   <section class="section" id="projects">
     <div class="container">
-      <SectionHead index="01" zh="精选项目" en="SELECTED WORK" note="一些认真做过的小东西。" />
+      <SectionHead index="01" zh="精选项目" en="SELECTED WORK" note="投入最多精力、持续维护的作品。" data-reveal />
       <div class="project-grid">
         {
-          projects.map((p, i) => (
-            <a class="project-card" href={`/projects/${p.slug}/`}>
-              <div class="project-art">
-                <ProjectArtwork art={p.artwork} />
-              </div>
-              <div class="project-body">
-                <div class="project-top">
-                  <span class="project-index">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="project-arrow" aria-hidden="true">↗</span>
+          projects.map((p, i) => {
+            const [name, tagline] = p.data.title.split(/\s+—\s+/);
+            return (
+              <a
+                class="project-card"
+                href={`/projects/${p.id}/`}
+                data-reveal
+                style={`--reveal-delay:${(i % 2) * 90}ms`}
+              >
+                <div class="project-art">
+                  {p.data.cover ? (
+                    <img src={p.data.cover} alt={`${name} 界面截图`} loading="lazy" />
+                  ) : (
+                    <ProjectArtwork art={p.data.artwork} />
+                  )}
                 </div>
-                <h3>
-                  {p.name}
-                  <span class="project-tagline">{p.tagline}</span>
-                </h3>
-                <p>{p.description}</p>
-                <ul class="tags">
-                  {p.tags.map((t) => <li>{t}</li>)}
-                </ul>
-              </div>
-            </a>
-          ))
+                <div class="project-body">
+                  <div class="project-top">
+                    <span class="project-index">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="project-arrow" aria-hidden="true">↗</span>
+                  </div>
+                  <h3>
+                    {name}
+                    {tagline && <span class="project-tagline">{tagline}</span>}
+                  </h3>
+                  <p>{p.data.description}</p>
+                  <ul class="tags">
+                    {p.data.tags.map((t) => <li>{t}</li>)}
+                  </ul>
+                </div>
+              </a>
+            );
+          })
         }
       </div>
     </div>
@@ -71,22 +107,22 @@ import { site, projects, experiments, notes } from '../data/site';
   {/* ---------- 02 数字实验室 ---------- */}
   <section class="section" id="lab">
     <div class="container">
-      <SectionHead index="02" zh="数字实验室" en="PLAYGROUND" note="代码与视觉的边界，在这里试探。" />
+      <SectionHead index="02" zh="数字实验室" en="PLAYGROUND" note="代码与视觉边界的交互实验。" data-reveal />
       <div class="lab-grid">
-        {experiments.map((e) => <LabCard experiment={e} />)}
+        {experiments.map((e, i) => <LabCard experiment={e} data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`} />)}
       </div>
     </div>
   </section>
 
-  {/* ---------- 03 最近笔记 ---------- */}
+  {/* ---------- 03 笔记与研究 ---------- */}
   <section class="section" id="notes">
     <div class="container">
-      <SectionHead index="03" zh="最近笔记" en="FIELD NOTES" note="写给自己看，也欢迎你看。" />
-      <div class="note-list">
+      <SectionHead index="03" zh="笔记与研究" en="FIELD NOTES" note="记录思考与方法，欢迎交流。" data-reveal />
+      <div class="note-list" data-reveal>
         {
-          notes.map((n) => (
-            <a class="note-row" href={`/notes/${n.slug}/`}>
-              <span class="note-date">{n.date}</span>
+          writings.map((n) => (
+            <a class="note-row" href={n.href}>
+              <span class="note-date">{fmt(n.date)}</span>
               <span class="note-title">{n.title}</span>
               <span class="note-cat">{n.category}</span>
               <span class="note-arrow" aria-hidden="true">→</span>
@@ -99,7 +135,7 @@ import { site, projects, experiments, notes } from '../data/site';
 
   {/* ---------- about ---------- */}
   <section class="section about" id="about">
-    <div class="container about-grid">
+    <div class="container about-grid" data-reveal>
       <h2>{site.aboutTitle}</h2>
       <div class="about-copy">
         <p>{site.introduction}{site.aboutText}</p>

@@ -1,29 +1,38 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { site, notes, type Note } from '../../data/site';
+import { site } from '../../data/site';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
-export function getStaticPaths() {
-  return notes.map((n) => ({ params: { slug: n.slug }, props: { note: n } }));
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
 }
 
 interface Props {
-  note: Note;
+  note: CollectionEntry<'notes'>;
 }
 const { note } = Astro.props;
+const { Content } = await render(note);
+const date = note.data.date.toISOString().slice(0, 10);
 ---
 
-<Layout title={`${note.title} | ${site.name}`} description={note.summary}>
+<Layout title={`${note.data.title} | ${site.name}`} description={note.data.description}>
   <div class="container detail">
     <a class="back-link" href="/#notes">← 返回笔记</a>
 
-    <header class="detail-head">
-      <span class="eyebrow">{note.category} / {note.date}</span>
-      <h1>{note.title}</h1>
-      <p class="detail-sub">{note.summary}</p>
+    <header class="detail-head" data-reveal>
+      <span class="eyebrow">NOTE / {date}</span>
+      <h1>{note.data.title}</h1>
+      <p class="detail-sub">{note.data.description}</p>
+      <div class="detail-meta">
+        <ul class="tags">
+          {note.data.tags.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
     </header>
 
-    <div class="prose">
-      {note.paragraphs.map((p) => <p>{p}</p>)}
+    <div class="prose" data-reveal>
+      <Content />
     </div>
   </div>
 </Layout>

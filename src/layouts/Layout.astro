@@ -19,6 +19,14 @@ const { title = site.title, description = site.description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark light" />
     <script is:inline>
+      if (
+        'IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        document.documentElement.classList.add('reveal-armed');
+      }
+    </script>
+    <script is:inline>
       (() => {
         const key = 'beta-theme';
         const system = window.matchMedia('(prefers-color-scheme: dark)');
@@ -77,6 +85,8 @@ const { title = site.title, description = site.description } = Astro.props;
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <body id="top">
     <a class="skip-link" href="#main">跳到主要内容</a>
@@ -85,5 +95,21 @@ const { title = site.title, description = site.description } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <script>
+      if (document.documentElement.classList.contains('reveal-armed')) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-revealed');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+        );
+        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>

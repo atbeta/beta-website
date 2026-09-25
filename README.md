@@ -1,8 +1,8 @@
-# beta / — 个人开发者网站（示例）
+# beta / — 个人开发者网站
 
-一个深色、克制、带 Three.js 交互场景的个人主页示例：精选项目、可交互实验室、笔记、关于与联系。
+一个深色、克制、带交互场景的个人主页：精选项目、可交互实验室、笔记与研究、关于与联系。
 
-> ⚠️ 当前站点内所有项目、文章与邮箱均为**示例内容**，页脚已标注「演示站点」。按下方说明替换成真实信息即可。
+技术栈：Astro 7（静态输出）+ TypeScript + vanilla Three.js（首页与内置场景）+ React 19 孤岛（实验室 demo）+ MDX 内容（Shiki 高亮）。
 
 ## 运行
 
@@ -10,35 +10,36 @@
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:4321
+pnpm dev        # http://localhost:4321（同项目只允许一个 dev 实例）
 pnpm build      # 产物输出到 dist/
 pnpm preview    # 本地预览构建结果
 pnpm check      # astro check
 ```
 
-## 把示例换成你自己的内容
+注意：改动 `astro.config.mjs`、`src/content.config.ts` 或新增路由目录后，长跑的 dev server 可能不识别新路由，需重启。
 
-只需要改一个文件：**`src/data/site.ts`**
+## 内容管理
 
-| 要替换的内容 | 位置 |
-| --- | --- |
-| 名字 / 标志 / 站点标题 / 简介 | `site` 对象的 `name`、`wordmark`、`title`、`description`、`introduction` |
-| 首页大标题 / 关于区 | `site` 对象的 `heroLines`（两行）、`aboutTitle`、`aboutText` |
-| 联系邮箱 | `site.email`（页脚复制按钮会同步） |
-| GitHub 主页 | `site.githubUrl`（`null` = 不显示 GitHub 链接） |
-| 三个项目卡片 + 详情页 | `projects` 数组（`paragraphs` 是详情页正文段落） |
-| 三个实验室条目 + 演示页 | `experiments` 数组（`mode` 决定场景：`knot` / `particles` / `wave`） |
-| 三篇笔记 + 正文 | `notes` 数组（`paragraphs` 是正文段落） |
-| 「演示站点」标记 | `site.sample` 改为 `false` 即移除页脚标注 |
+**文章与项目**：往 `src/content/` 下对应目录放 MDX 文件即可，frontmatter 结构见 `src/content.config.ts`：
 
-源码 / 在线链接：`projects[].repositoryUrl`、`liveUrl`，填 `null` 时详情页会显示「源码链接待补充」，不会出现死链。
+| 目录 | 内容 | 路由 |
+| --- | --- | --- |
+| `content/projects/` | 项目（含 `cover` 截图 / `artwork` 卡片插画、`repo`/`url` 链接） | `/projects/<slug>/` |
+| `content/notes/` | 笔记 | `/notes/<slug>/` |
+| `content/research/` | 研究长文 | `/research/<slug>/` |
+
+**站点文案与实验室条目**：`src/data/site.ts`（名字、简介、hero、邮箱、GitHub、`experiments` 数组）。
+
+实验室条目二选一：`mode: 'knot' | 'particles' | 'wave'` 用内置 vanilla three 场景；`demo: '<key>'` 挂 `src/components/lab/index.tsx` 注册的 React demo。
 
 ## 结构速览
 
-- `src/pages/index.astro` — 首页（Hero 场景 + 项目 / 实验室 / 笔记 / 关于）
-- `src/pages/{projects,lab,notes}/[slug].astro` — 由 `site.ts` 数据生成的详情页
-- `src/components/Scene.astro` + `src/scripts/scenes.ts` — Three.js 场景（占位 SVG、暂停、拖动、参数控件、离屏暂停、prefers-reduced-motion）
-- `src/styles/global.css` — 颜色 / 间距 / 字体令牌在 `:root`
+- `src/pages/index.astro` — 首页（Hero 场景 + 项目 / 实验室 / 笔记与研究 / 关于）
+- `src/pages/{projects,notes,research,lab}/[slug].astro` — 详情页（content collections / experiments 驱动）
+- `src/pages/rss.xml.ts` + `@astrojs/sitemap` — RSS 与站点地图（域名在 `astro.config.mjs` 的 `site`）
+- `src/components/Scene.astro` + `src/scripts/scenes.ts` — vanilla Three.js 场景（占位 SVG、暂停、拖动、参数控件、离屏暂停、prefers-reduced-motion）
+- `src/components/lab/` — React 交互孤岛（`client:only="react"` 挂载；无 Tailwind，样式在同目录 css）
+- `src/styles/global.css` — 颜色 / 间距 / 字体令牌在 `:root`，含 `.prose` 的 MDX 排版
 
 设计基调：冷黑底色 `#0b0e14`、深蓝灰面板 `#121722`、冰白文字 `#edf3ff`、电光蓝强调 `#73a7ff`。
 
@@ -46,4 +47,4 @@ pnpm check      # astro check
 
 ## 深浅主题
 
-站点支持深色 / 浅色两套主题：页头的太阳 / 月亮按钮随时切换。首次访问跟随系统偏好，手动选择会被记住并沿用之后的访问。两套配色分别定义在 `global.css` 的 `:root`（深色）与 `:root[data-theme="light"]`（浅色）中，插画和 3D 场景（含 `--scene-secondary` 辅助线色）会随主题即时换色，无需刷新页面。
+站点支持深色 / 浅色两套主题：页头的太阳 / 月亮按钮随时切换。首次访问跟随系统偏好，手动选择会被记住并沿用之后的访问。两套配色分别定义在 `global.css` 的 `:root`（深色）与 `:root[data-theme="light"]`（浅色）中。主题切换时 `Layout` 会派发 `themechange` 事件，canvas/three 组件监听它重读 CSS 变量并即时换色，无需刷新页面。

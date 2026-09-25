@@ -1,14 +1,14 @@
 ---
-interface Props {
+interface Props extends astroHTML.JSX.HTMLAttributes {
   index: string;
   zh: string;
   en: string;
   note?: string;
 }
-const { index, zh, en, note } = Astro.props;
+const { index, zh, en, note, ...rest } = Astro.props;
 ---
 
-<div class="section-head">
+<div class="section-head" {...rest}>
   <div>
     <span class="idx">{index} /</span>
     <h2 class="zh">{zh}</h2>

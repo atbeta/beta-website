@@ -1,14 +1,14 @@
 ---
 import type { Experiment } from '../data/site';
 
-interface Props {
+interface Props extends astroHTML.JSX.HTMLAttributes {
   experiment: Experiment;
 }
-const { experiment } = Astro.props;
-const { mode } = experiment;
+const { experiment, ...rest } = Astro.props;
+const mode = experiment.demo ?? experiment.mode;
 ---
 
-<a class="lab-card" href={`/lab/${experiment.slug}/`}>
+<a class="lab-card" href={`/lab/${experiment.slug}/`} {...rest}>
   <div class="lab-preview">
     {
       mode === 'knot' && (
@@ -56,6 +56,78 @@ const { mode } = experiment;
             <path d="M160 30 Q170 100 160 180" />
             <path d="M240 30 Q250 100 240 180" />
           </g>
+        </svg>
+      )
+    }
+    {
+      mode === 'topography' && (
+        <svg viewBox="0 0 320 200" fill="none" aria-hidden="true">
+          <g stroke="var(--scene-line)" stroke-opacity=".55" stroke-width="1">
+            <path d="M20 150 L70 100 L110 130 L160 70 L210 120 L260 85 L300 140" />
+            <path d="M20 165 L70 118 L110 145 L160 88 L210 135 L260 102 L300 155" stroke-opacity=".35" />
+            <path d="M20 180 L70 136 L110 160 L160 106 L210 150 L260 120 L300 168" stroke-opacity=".2" />
+          </g>
+          <line x1="20" y1="100" x2="300" y2="100" stroke="var(--accent)" stroke-opacity=".8" stroke-width="1.5" />
+        </svg>
+      )
+    }
+    {
+      mode === 'diffraction' && (
+        <svg viewBox="0 0 320 200" fill="none" aria-hidden="true">
+          <g stroke="var(--scene-line)" stroke-opacity=".55" stroke-width="1">
+            <circle cx="160" cy="100" r="18" />
+            <circle cx="160" cy="100" r="38" stroke-opacity=".38" />
+            <circle cx="160" cy="100" r="58" stroke-opacity=".24" />
+            <circle cx="160" cy="100" r="78" stroke-opacity=".14" />
+          </g>
+          <circle cx="160" cy="100" r="5" fill="var(--accent)" />
+        </svg>
+      )
+    }
+    {
+      mode === 'shader' && (
+        <svg viewBox="0 0 320 200" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="shader-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="var(--accent)" stop-opacity=".9" />
+              <stop offset="1" stop-color="var(--accent)" stop-opacity=".1" />
+            </linearGradient>
+          </defs>
+          <rect x="60" y="40" width="200" height="120" fill="url(#shader-grad)" opacity=".35" />
+          <g stroke="var(--scene-line)" stroke-opacity=".55" stroke-width="1">
+            <path d="M60 100 H260" />
+            <path d="M110 40 V160" stroke-opacity=".3" />
+            <path d="M210 40 V160" stroke-opacity=".3" />
+          </g>
+        </svg>
+      )
+    }
+    {
+      mode === 'overlay' && (
+        <svg viewBox="0 0 320 200" fill="none" aria-hidden="true">
+          <g stroke="var(--scene-line)" stroke-opacity=".55" stroke-width="1">
+            <rect x="66" y="52" width="84" height="84" stroke-dasharray="6 5" />
+            <rect x="182" y="58" width="84" height="84" stroke-dasharray="6 5" transform="rotate(6 224 100)" />
+          </g>
+          <rect x="92" y="76" width="42" height="42" stroke="var(--accent)" stroke-width="1.5" />
+          <rect x="203" y="79" width="42" height="42" stroke="var(--accent)" stroke-width="1.5" />
+          <line x1="160" y1="30" x2="160" y2="170" stroke="var(--text)" stroke-opacity=".14" />
+        </svg>
+      )
+    }
+    {
+      mode === 'nanosheet' && (
+        <svg viewBox="0 0 320 200" fill="none" aria-hidden="true">
+          <g stroke="var(--accent)" stroke-opacity=".85" stroke-width="1.5">
+            <path d="M70 122 L160 74 L250 122" />
+            <path d="M70 104 L160 56 L250 104" />
+            <path d="M70 86 L160 38 L250 86" />
+          </g>
+          <g stroke="var(--scene-line)" stroke-opacity=".5" stroke-width="1">
+            <path d="M130 141 L220 93 L220 61 L130 109 Z" />
+            <path d="M130 109 L130 141 M220 61 L220 93" stroke-opacity=".3" />
+          </g>
+          <path d="M60 140 L160 188 L260 140" stroke="var(--text)" stroke-opacity=".2" />
         </svg>
       )
     }
